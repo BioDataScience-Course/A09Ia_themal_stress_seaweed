@@ -7,20 +7,18 @@ output: html_document
 
 # Introduction
 
-<!--% Proposez un court paragraphe d’introduction de 2-3 phrases sur *Fucus distichus* L., 1767. -->
-
-<!--% Proposez un court paragraphe de  2-3 phrases de la photosynthèse chez les algues. -->
+<!--% Rédigez un court paragraphe d’introduction du sujet en 2-3 phrases (*Fucus distichus*, photosynthèse et stress thermique chez les algues) -->
 
 # But
 
 Ce carnet de notes a pour objectif de répondre aux deux questions suivantes :
 
--   Y a-t-il une perte de la capacité photosynthétique de *F. distichus* après 15 minutes dans une eau à 24 degrés
--   Y a-t-il une différence de perte de capacité photosynthétique de *F. distichus* près 15 minutes dans une eau à 24 degrés entre les organismes provenant du Svalbard et du Kirkenes.
+-   Y a-t-il une perte de la capacité photosynthétique de *F. distichus* après 15 minutes dans une eau à 24 degrés ?
+-   Y a-t-il une différence de perte de capacité photosynthétique de *F. distichus* près 15 minutes dans une eau à 24 degrés entre les organismes provenant du Svalbard et du Kirkenes ?
 
 # Analyses
 
-<!--% Importez seaweed.csv se trouvant dans le dossier data/. -->
+<!--% Importez photosynthesis.csv se trouvant dans le dossier data/. -->
 
 ```{r import}
 
@@ -38,7 +36,7 @@ Ce carnet de notes a pour objectif de répondre aux deux questions suivantes :
 
 ```
 
-## Y a-t-il une perte de la capacité photosynthétique après 15 minutes dans une eau à 24 degrés
+## Variation de la capacité photosynthétique après 15 minutes dans une eau à 24 degrés
 
 <!--% Quel test d'hypothèse allez-vous réaliser et pourquoi en 3 phrases? Formulez en plus les hypothèses nulles et alternatives. Citez les conditions d'applications du test choisi. -->
 
@@ -56,7 +54,7 @@ Ce carnet de notes a pour objectif de répondre aux deux questions suivantes :
 
 <!--% Interprétez le graphique réalisé en 2 phrases, la partie statistique du test réalisé et la partie biologique en 4 phrases. -->
 
-## Y a-t-il une différence de perte de capacité photosynthétique entre les organismes provenant du Svalbard et du Kirkenes.
+## Différence entre Svalbard et Kirkenes
 
 <!--% Quel test d'hypothèse allez-vous réaliser et pourquoi en 3 phrases? Formulez en plus les hypothèses nulles et alternatives. Citez les conditions d'applications du test choisi. -->
 
