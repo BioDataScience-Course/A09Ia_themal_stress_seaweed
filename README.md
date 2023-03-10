@@ -10,7 +10,7 @@ Svalbard et Kirkenes.
 
 Les auteurs ont publié les données employées pour réaliser cette étude
 (Smolina et al. 2015). Vous utiliserez une partie de ces données pour
-explorer et appliquer des tests *t*t de Student et des tests de
+explorer et appliquer des tests *t* de Student et des tests de
 Wilcoxon-Mann-Whitney. Les données brutes mises à disposition par les
 auteurs de l’article se trouvent dans le sous-dossier `data/raw/`.
 
@@ -22,7 +22,7 @@ acquis les compétences suivantes :
 - représenter graphiquement de la manière la plus appropriée les données
   à comparer avec un test *t* de Student
 - être capable de formuler les hypothèses d’un test *t* de Student et
-  d’un test de Wicoxon-Mann-Whitney
+  d’un test de Wilcoxon-Mann-Whitney
 - pouvoir réaliser et interpréter un test *t* de Student et un test de
   Wilcoxon-Mann-Whitney sur des données biologiques
 - comprendre les notions de puissance d’un test d’hypothèse et les
@@ -32,8 +32,12 @@ acquis les compétences suivantes :
 
 Complétez le document `seaweed.Rmd`. Vous allez explorer la perte de
 capacité photosynthétique de *F. distichus* après un stress thermique de
-15 minutes. La quantification se fait via l’indice de performance de la
-photosynthèse (PI abs). Voyez l’article original pour plus de détails.
+15 minutes afin d’étudier les capacités d’adaptation à des variations du
+milieu chez cette espèce intertidale (c’est à dire, vivant dans la zone
+de balancement des marées sujette à des variations importantes de
+salinité, température, et action mécanique des vagues). La
+quantification se fait via l’indice de performance de la photosynthèse
+(PI abs). Voyez l’article original pour plus de détails.
 
 N’oubliez pas de “knitter” le document en HTML à la fin du travail pour
 vérifier que tout fonctionne bien, et corrigez les erreurs éventuelles

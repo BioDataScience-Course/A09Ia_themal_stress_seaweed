@@ -5,6 +5,12 @@ date: "`r Sys.Date()`"
 output: html_document
 ---
 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, message = FALSE)
+# Configuration de l'environnement et chargement des packages nécessaires
+___
+```
+
 # Introduction
 
 <!--% Rédigez un court paragraphe d’introduction du sujet en 2-3 phrases (*Fucus distichus*, photosynthèse et stress thermique chez les algues) -->
@@ -13,8 +19,8 @@ output: html_document
 
 Ce carnet de notes a pour objectif de répondre aux deux questions suivantes :
 
--   Y a-t-il une perte de la capacité photosynthétique de *F. distichus* après 15 minutes dans une eau à 24 degrés ?
--   Y a-t-il une différence de perte de capacité photosynthétique de *F. distichus* près 15 minutes dans une eau à 24 degrés entre les organismes provenant du Svalbard et du Kirkenes ?
+-   La capacité photosynthétique de *F. distichus* est-elle affectée après 15 minutes dans une eau à 24°C ?
+-   Une variation de la capacité photosynthétique de *F. distichus* avec le même traitement diffère-t-elle entre les algues provenant du Svalbard et du Kirkenes ?
 
 # Analyses
 
@@ -24,7 +30,7 @@ Ce carnet de notes a pour objectif de répondre aux deux questions suivantes :
 
 ```
 
-<!--% Sélectionnez les individus soumis à une eau de 24° au temps 0 et après 15 minutes. -->
+<!--% Sélectionnez les individus soumis à une eau de 24°C au temps 0 et après 15 minutes. -->
 
 ```{r select}
 
@@ -36,7 +42,7 @@ Ce carnet de notes a pour objectif de répondre aux deux questions suivantes :
 
 ```
 
-## Variation de la capacité photosynthétique après 15 minutes dans une eau à 24 degrés
+## Variation de la capacité photosynthétique après 15 minutes dans une eau à 24°C
 
 <!--% Quel test d'hypothèse allez-vous réaliser et pourquoi en 3 phrases? Formulez en plus les hypothèses nulles et alternatives. Citez les conditions d'applications du test choisi. -->
 
