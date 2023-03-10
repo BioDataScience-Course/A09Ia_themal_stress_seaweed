@@ -19,7 +19,7 @@ ___
 
 Ce carnet de notes a pour objectif de répondre aux deux questions suivantes :
 
--   La capacité photosynthétique de *F. distichus* est-elle affectée après 15 minutes dans une eau à 24°C ?
+-   La capacité photosynthétique de *F. distichus* issu du Svalbard est-elle affectée après 60 minutes dans une eau à 20°C ?
 -   Une variation de la capacité photosynthétique de *F. distichus* avec le même traitement diffère-t-elle entre les algues provenant du Svalbard et du Kirkenes ?
 
 # Analyses
@@ -27,53 +27,129 @@ Ce carnet de notes a pour objectif de répondre aux deux questions suivantes :
 <!--% Importez photosynthesis.csv se trouvant dans le dossier data/. -->
 
 ```{r import}
-
+photo <- ___
+skimr::skim(photo)
 ```
 
-<!--% Sélectionnez les individus soumis à une eau de 24°C au temps 0 et après 15 minutes. -->
+<!--% Sélectionnez les individus issus du Svalbard et soumis à une eau de 20°C au temps 0 et après 60 minutes. -->
 
-```{r select}
-
+```{r select1}
+photo %>.%
+  ___ %->%
+  photo2
 ```
 
-<!--% Remaniez le tableau de données afin d'obtenir un tableau large avec une colonne correspondant à l'indice de performance de la photosynthèse en temps 0 et après 15 minutes. -->
+<!--% Le tableau est mal présenté car vous voyez bien que les mêmes individus apparaissent sur deux lignes différentes (attention : c'est une erreur fréquente que de se retrouver dans cette situation !) Remaniez le tableau de données afin d'obtenir un tableau large avec une colonne correspondant à l'indice de performance de la photosynthèse au temps 0 et après 60 minutes et une seule ligne par individu. Affichez ensuite le tableau. -->
 
-```{r pivot}
-
+```{r pivot1}
+photo2 %>.%
+  ___  %->%
+  photo3
+photo3
 ```
 
-## Variation de la capacité photosynthétique après 15 minutes dans une eau à 24°C
+## Variation de la capacité photosynthétique après 60 minutes dans une eau à 20°C
 
-<!--% Quel test d'hypothèse allez-vous réaliser et pourquoi en 3 phrases? Formulez en plus les hypothèses nulles et alternatives. Citez les conditions d'applications du test choisi. -->
+<!--% Quel test d'hypothèse et quelle variante allez-vous réaliser et pourquoi en 2 phrases, en supposant que l'on ait vérifié la distribution Normale des différences entre pi_abs_0 et pi_abs_60 sur un échantillon similaire mais avec 40 spécimens et, par ailleurs, que nous n'avons pas d'idée a priori sur le sens possible de la variation ? -->
 
-<!--% Réalisez un graphique pertinent afin d'illustrer la situation d'après l'indice de performance de la photosynthèse -->
+<!-- Formulez les hypothèses nulle et alternative de votre test. -->
+
+H0: ***H1:***
+
+<!--% Réalisez le graphique le plus pertinent pour représenter les données par rapport à ce test. -->
 
 ```{r plot1}
 
 ```
 
-<!--% Réalisez le test d'hypothèse.-->
+<!-- Résumez ces données afin d'avoir un tableau qui reprenne les descripteurs statistiques importants par rapport au test à réaliser. -->
 
-```{r ttest1}
+```{r tab1}
 
 ```
 
-<!--% Interprétez le graphique réalisé en 2 phrases, la partie statistique du test réalisé et la partie biologique en 4 phrases. -->
+<!--% Réalisez le test d'hypothèse en considérant un seuil alpha de 5%.-->
+
+```{r test1a}
+
+```
+
+<!--% Interprétez ce résultat sur le plan statistique au seuil alpha de 5% et biologique en 3 phrases maximum. L'intensité de l'effet observé vous paraît-il avoir une importance biologique ? -->
+
+<!--% Remettez en doute l'hypothèse de Normalité. Quel test feriez-vous dans ce cas ? -->
+
+<!-- Formulez les hypothèses nulle et alternative de ce test alternatif. -->
+
+H0: ***H1:***
+
+<!--% Réalisez le second test d'hypothèse en considérant un seuil alpha de 5%.-->
+
+```{r test1b}
+
+```
+
+<!--% Interprétez ce second résultat au seuil alpha de 5% et comparez-le de manière critique au test précédent en 4 phrases maximum. Tirez une conclusion définitive de votre analyse. -->
 
 ## Différence entre Svalbard et Kirkenes
 
-<!--% Quel test d'hypothèse allez-vous réaliser et pourquoi en 3 phrases? Formulez en plus les hypothèses nulles et alternatives. Citez les conditions d'applications du test choisi. -->
+<!--% Sélectionnez tous les individus soumis à une eau de 20°C après 60 minutes. Affichez le tableau dans votre rapport. -->
 
-<!--% Réalisez un graphique pertinent afin d'illustrer la situation d'après l'indice de performance de la photosynthèse -->
+```{r select2}
+photo %>.%
+  ___ %->%
+  photo4
+photo4
+```
+
+<!--% Quel test d'hypothèse allez-vous réaliser et pourquoi en 2 phrases ? -->
+
+<!--% Formulez les hypothèses nulle et alternative de ce test. -->
+
+H0: ***H1:***
+
+<!--% Réalisez un graphique pertinent par rapport à ce test afin d'illustrer la situation d'après l'indice de performance de la photosynthèse pi_abs. -->
 
 ```{r plot2}
 
 ```
 
-<!--% Réalisez le test d'hypothèse.-->
+<!-- Calculez un tableau des descripteurs statistiques pertinents par rapport à ce test (incluez médiane, moyenne et écart type dans vos calculs). -->
 
-```{r ttest2}
+```{r tab2}
 
 ```
 
-<!--% Interprétez le graphique réalisé en 2 phrases, la partie statistique du test réalisé et la partie biologique en 4 phrases. -->
+<!--% Réalisez le test d'hypothèse, en prenant un seuil alpha de 5%. -->
+
+```{r test2a}
+
+```
+
+<!--% Interprétez le résultat obtenu en 3 phrases, au niveau statistique et biologique. -->
+
+<!--% Dans le cas où des données préliminaires indiquent la Normalité des observations sur base d'un échantillon plus important réalisé aux mêmes stations, quel test choisiriez-vous (réponse précise, y compris la variante du test), considérant que la taille de l'échantillon préliminaire n'a pas permis de vérifier par la même occasion si les variances étaient égales ? -->
+
+<!--% Formulez les hypothèses nulle et alternative de ce dernier test. -->
+
+H0: ***H1:***
+
+<!--% Effectuez ce test, toujours avec un seuil alpha de 5%. -->
+
+```{r test2b}
+
+```
+
+<!--% Interprétez-le et comparez-le au précédent de manière critique. Quel type d'erreur risque-t-on de commettre ici ? -->
+
+<!--% Terminez votre analyse en réalisant une analyse de la puissance de ce dernier test. Pour ce faire, vous devez calculer la taille de l'effet observé selon Cohen qui correspond à la différence des moyennes divisée par l'écart type de l'ensemble des données) -->
+
+```{r power2b}
+# Calcul de l'effet observé (d de Cohen)
+(cohen_d <- ___ / sd(___$___))
+# Calcul de la puissance du test
+pwr::pwr.t.test(n = ___, d = cohen_d, sig.level = ___, type = "two.sample", alternative = "___")
+```
+
+<!--% Sur base de la puissance du test (correspondant à 1 - beta), beta étant le risque de se tromper lorsque l'on ne rejette pas H0, quelle est votre conclusion finale concernant le comparaison des deux sites en 3 phrases maximales ? -->
+
+<!--% Question bonus : seriez-vous capable de suggérer la taille d'échantillon nécessaire pour observer un effet significatif avec un d de Cohen de la même valeur ? Si oui, comment ? -->
