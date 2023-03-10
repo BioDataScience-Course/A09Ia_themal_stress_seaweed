@@ -1,36 +1,39 @@
-Réponse photosynthétique à un stress thermique sur *Fucus distichus* L.,
-1767
+Réponse photosynthétique à un stress thermique chez *Fucus distichus*
+L., 1767
 ================
 
 <!-- DO NOT EDIT README.md -->
 
-Smolina et al. (2016) ont étudié l’effet d’un stress thermique sur
+Smolina et al. (2016) ont étudié l’effet d’un stress thermique chez
 *Fucus distichus* L., 1767 dans deux régions norvégiennes différentes :
 Svalbard et Kirkenes.
 
 Les auteurs ont publié les données employées pour réaliser cette étude
-(Smolina et al. 2015). L’ensemble des données collectées et employées
-dans le cadre de l’article de Smolina et al. (2016) ne seront pas
-employées dans ce travail. Nous allons employr un sous-ensemble.
-Néanmoins les données mises à disposition par les auteurs se trouvent
-dans le dossier `data_raw/`.
+(Smolina et al. 2015). Vous utiliserez une partie de ces données pour
+explorer et appliquer des tests *t*t de Student et des tests de
+Wilcoxon-Mann-Whitney. Les données brutes mises à disposition par les
+auteurs de l’article se trouvent dans le sous-dossier `data/raw/`.
 
 # Objectifs
 
-Ce projet est individuel et cadré. Ce dernier permet de démontrer que
-vous avez acquis les compétences suivantes :
+Ce projet est individuel et cadré. Il permet de démontrer que vous avez
+acquis les compétences suivantes :
 
--   être capable de formuler les hypothèses d’un test *t* de Student
--   pouvoir réaliser un test *t* de Student sur des données biologiques
--   maîtriser la description et l’interprétation d’un test *t* de
-    Student.
+- représenter graphiquement de la manière la plus appropriée les données
+  à comparer avec un test *t* de Student
+- être capable de formuler les hypothèses d’un test *t* de Student et
+  d’un test de Wicoxon-Mann-Whitney
+- pouvoir réaliser et interpréter un test *t* de Student et un test de
+  Wilcoxon-Mann-Whitney sur des données biologiques
+- comprendre les notions de puissance d’un test d’hypothèse et les
+  différences entre test paramétrique et non paramétrique
 
 # Consignes
 
-Complétez le document `seaweed.Rmd`. Ce dernier s’intéresse à la perte
-de capacité photosynthétique de *F. distichus* après un stress thermique
-de 15 minutes selon un mesure de la photosynthèse : l’indice de
-performance de la photosynthèse (PI abs).
+Complétez le document `seaweed.Rmd`. Vous allez explorer la perte de
+capacité photosynthétique de *F. distichus* après un stress thermique de
+15 minutes. La quantification se fait via l’indice de performance de la
+photosynthèse (PI abs). Voyez l’article original pour plus de détails.
 
 N’oubliez pas de “knitter” le document en HTML à la fin du travail pour
 vérifier que tout fonctionne bien, et corrigez les erreurs éventuelles
@@ -39,7 +42,7 @@ rencontrées à ce stade avant de clôturer votre travail. Vérifiez
 deadline.
 
 Ce projet correspond au template
-<https://github.com/BioDataScience-Course/A09Ia_thermal_stress_seaweed>
+<https://github.com/BioDataScience-Course/A09Ia_ttest>
 
 # Bibliographie
 
