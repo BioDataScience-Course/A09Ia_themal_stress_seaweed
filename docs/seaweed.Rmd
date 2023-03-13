@@ -71,7 +71,8 @@ H0: ***H1:***
 <!--% Réalisez le test d'hypothèse en considérant un seuil alpha de 5%.-->
 
 ```{r test1a}
-
+test1a <- ___
+test1a  
 ```
 
 <!--% Interprétez ce résultat sur le plan statistique au seuil alpha de 5% et biologique en 3 phrases maximum. L'intensité de l'effet observé vous paraît-il avoir une importance biologique ? -->
@@ -85,7 +86,8 @@ H0: ***H1:***
 <!--% Réalisez le second test d'hypothèse en considérant un seuil alpha de 5%.-->
 
 ```{r test1b}
-
+test1b <- ___
+test1b  
 ```
 
 <!--% Interprétez ce second résultat au seuil alpha de 5% et comparez-le de manière critique au test précédent en 4 phrases maximum. Tirez une conclusion définitive de votre analyse. -->
@@ -122,7 +124,8 @@ H0: ***H1:***
 <!--% Réalisez le test d'hypothèse, en prenant un seuil alpha de 5%. -->
 
 ```{r test2a}
-
+test2a <- ___
+test2a
 ```
 
 <!--% Interprétez le résultat obtenu en 3 phrases, au niveau statistique et biologique. -->
@@ -136,7 +139,8 @@ H0: ***H1:***
 <!--% Effectuez ce test, toujours avec un seuil alpha de 5%. -->
 
 ```{r test2b}
-
+test2b <- ___
+test2b
 ```
 
 <!--% Interprétez-le et comparez-le au précédent de manière critique. Quel type d'erreur risque-t-on de commettre ici ? -->
@@ -147,9 +151,29 @@ H0: ***H1:***
 # Calcul de l'effet observé (d de Cohen)
 (cohen_d <- ___ / sd(___$___))
 # Calcul de la puissance du test
-pwr::pwr.t.test(n = ___, d = cohen_d, sig.level = ___, type = "two.sample", alternative = "___")
+power2b <- pwr::pwr.t.test(n = ___, d = cohen_d, sig.level = ___, type = "two.sample", alternative = "___")
+power2b
 ```
 
 <!--% Sur base de la puissance du test (correspondant à 1 - beta), beta étant le risque de se tromper lorsque l'on ne rejette pas H0, quelle est votre conclusion finale concernant le comparaison des deux sites en 3 phrases maximales ? -->
 
 <!--% Question bonus : seriez-vous capable de suggérer la taille d'échantillon nécessaire pour observer un effet significatif avec un d de Cohen de la même valeur ? Si oui, comment ? -->
+
+<!-- Le chunk ci-dessous ne doit pas être modifié. Il est présent afin de permettre une correction semi-automatisée de ce document. -->
+
+```{r check}
+obj_check <- list(
+  "import" = try(photo),
+  "select1" = try(photo2),
+  "pivot1" = try(photo3),
+  "test1a" = try(test1a),
+  "test1b" = try(test1b),
+  "select2" = try(photo4),
+  "test2a" = try(test2a),
+  "test2b" = try(test2b),
+  "power2b" = try(power)
+)
+
+fs::dir_create(here::here("test"))
+write$rds(obj_check, here::here("test", "seaweed_check.rds"), compress = "xz")
+```
