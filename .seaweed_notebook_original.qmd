@@ -1,0 +1,510 @@
+---
+title: "Réponse photosynthétique à un stress thermique chez *Fucus distichus*"
+author: "___"
+date: "`r Sys.Date()`"
+format:
+  html:
+    code-fold: true
+    code-tools: true
+    toc: true
+editor: visual
+lang: fr
+editor_options: 
+  chunk_output_type: inline
+bibliography: bibliography/references.bib
+---
+
+# Introduction
+
+@2015Smolina ont étudié expérimentalement l’effet d’un stress thermique chez *Fucus distichus* L., 1767 en Norvège dans deux régions différentes : Svalbard et Kirkenes. Ils ont mesuré la réponse (en terme de performance photosynthétique) de ces algues placées à différentes températures : 20°C, 24°C et 28°C. Ils ont aussi étudiés l'expression de gènes codant pour diverses protéines liées à un stress thermique ("heat shock proteins" ou HSP).
+
+# But
+
+Notre objectif est double. Il vise à répondre aux questions suivantes :
+
+-   La capacité photosynthétique de *F. distichus* issu de Svalbard est-elle affectée après 60 minutes dans une eau à 20°C ?
+-   Une variation de la capacité photosynthétique de *F. distichus* suite au même traitement diffère-t-elle entre les algues provenant de Svalbard et de Kirkenes ?
+
+# Matériel et méthodes
+
+@2015SmolinaData ont publié les données employées relatives à leur étude sous le doi <https://doi.org/10.5061/dryad.t1tk4> et sous licence CC0 1.0 (voir cette référence pour les sites d'étude, la méthode de collecte et de maintien des algues en aquarium). Une partie de ces données est utilisée ici pour répondre aux deux questions de recherche explicitées ci-dessus.
+
+L'indice de performance photosynthétique est obtenu par mesure de la fluorescence de la chlorophylle à l'aide d'un fluorimètre FluorPen FP100max (Photon Systems Instruments) après 15min d'adaptation à l'obscurité et par calcul à l'aide du logiciel FluorPen qui accompagne l'instrument.
+
+L'analyse des données est réalisée avec le logiciel R (`r R.version.string`) et en particulier le package {inferit} version `r packageVersion("inferit")` dans la [SciViews Box 2023](https://www.sciviews.org/software/svbox/). [Saturn Cloud](https://saturncloud.io/) (Linux Ubuntu 22.04) est utilisé pour exécuter le code et compiler la version HTML de ce bloc-notes.
+
+# Résultats
+
+```{r setup, include=FALSE}
+# Ceci est nécessaire pour les tests SDD, ne pas utiliser dans un "vrai" projet
+if (!"tools:tests" %in% search())
+  source(here::here("tests/tools_tests.R"), attach(NULL, name = "tools:tests"))
+
+# Configuration de l'environnement SciViews::R
+SciViews::R(___, lang = "fr")
+```
+
+## Description des données
+
+<!--% Importez `photosynthesis.rds` se trouvant dans le dossier `data` et résumez ces données à l'aide de la fonction `skim()` du package {skimr}. -->
+
+```{r import, record='RODFS', object='photo'}
+photo <- ___
+___
+```
+
+```{r desccomment, output='asis'}
+select_answer(r"-{
+[] -   Ce jeu de données ne contient aucune valeur manquante.
+[] -   Une valeur est manquante dans ce jeu de données.
+[] -   Plusieurs valeurs sont manquantes dans ce jeu de données.
+
+[] -   Ce tableau inclut uniquement des variables numériques.
+[] -   Le tableau comporte uniquement des variables qualitatives.
+[] -   Ce tableau contient deux variables qualitatives et quatre variables quantitatives. Ces variables quantitatives précisent les conditions de l'expérience à l'exception de la dernière qui reprend les résultats obtenus concernant la performance photosynthétique.
+[] -   Ce tableau contient deux variables qualitatives et quatre variables quantitatives. Deux d'entre elles précisent les conditions de l'expérience et les deux autres correspondent aux résultats obtenus concernant la performance photosynthétique.}-")
+```
+
+## Variation de la capacité photosynthétique après 60 minutes dans une eau à 20°C
+
+Nous analysons ici l'indice de performance photosynthétique pour les algues issues de Svalbard et maintenues pendant 60 min à 20°C après une mesure au début de l'expérience. Ci-dessous, le tableau des indices de performance photosynthétiques au temps *t* = 0min et *t* = 60min. Si un effet se fait sentir, nous nous attendons à ce que la performance photosynthétique soit diminuée par le traitement.
+
+<!--% Sélectionnez les individus issus du Svalbard et soumis à une eau de 20°C au temps 0 et après 60 minutes. -->
+
+```{r select1, record='RODFS', object='photo2'}
+photo %>.%
+  sfilter(., ___ & (___ | ___) &
+    ___) ->
+  photo2
+```
+
+<!--% Le tableau `photo2` est mal présenté -faites un `View(photo2)`- car les mêmes individus apparaissent sur deux lignes différentes (attention : c'est une erreur fréquente que de se retrouver dans cette situation !) Remaniez le tableau de données pour obtenir `photo3` sous forme de tableau large avec une seule ligne par individu. Focalisez-vous sur la variable `pi_abs` et créez `pi_0` et `pi_60`. Affichez ensuite le contenu de `photo3` en le formatant à l'aide de `tabularise()`. -->
+
+```{r pivot1, record='RODFS', object='photo3'}
+photo2 %>.%
+  spivot_wider(., names_from = ___, values_from = ___,
+    id_cols = "individual") %>.%
+  srename(., individu = ___, pi_0 = ___, pi_60 = ___) ->
+  photo3
+tabularise(photo3)
+```
+
+<!--% Réalisez le graphique le plus pertinent pour représenter les données par rapport à ce test. -->
+
+```{r plot1, record='RNP', arg='labels'}
+chart(data = ___, ___) +
+  ___(slope = 1, intercept = 0) +
+  ___() +
+  labs(y = "Performance de la photosynthèse à t = 60min", x = "Performance de la photosynthèse initiale (à t = 0min)")
+```
+
+<!-- Résumez ces données afin d'avoir un tableau `photo3_tab` qui reprenne les descripteurs statistiques importants par rapport au(x) test(s) que vous allez réaliser ensuite. Commencez par calculer `delta_pi` comme `pi_60 - pi_0` et calculez les statistiques pertinentes `mean_delta_pi`, `se_delta_pi` et `n` à partir de `delta_pi`. -->
+
+```{r tab1, record='RODFS', object='photo3_tab'}
+photo3 %>.%
+  smutate(., delta_pi = ___) %>.%
+  ssummarise(.,
+    `moyenne delta_pi` = ___,
+    `se delta_pi`      = ___,
+    `n`                = ___) ->
+  photo3_tab
+tabularise(photo3_tab)
+```
+
+<!--% Indiquez quel test et quelle variante du test vous allez utiliser sachant que vous calculerez votre statistique comme pi_abs(t60) - pi_abs(t0) et que vous considéez dans un premier temps que cette statistique se distribue à peu près de manière normale (mais sans l'avoir vérifié). -->
+
+```{r test1achoice, output='asis'}
+select_answer(r"-{
+[] Nous réalisons un test *t* de Student apparié.
+[] Nous réalisons un test *t* de Student indépendant.
+[] Nous réalisons un test *t* de Welch apparié.
+[] Nous réalisons un test *t* de Welch indépendant.
+[] Nous réalisons un test de Wilcoxon/Mann-Whitney apparié.
+[] Nous réalisons un test *t* de Wilcoxon/Mann-Whitney indépendant.
+  
+[] Le test est bilatéral et nous utilisons $\alpha$ = 5%. Les hypothèses sont :
+[] Le test est unilatéral à gauche et nous utilisons $\alpha$ = 5%. Les hypothèses sont :
+[] Le test est unilatéral à droite et nous utilisons $\alpha$ = 5%. Les hypothèses sont :}-")
+```
+
+<!-- Formulez les hypothèses nulle et alternative de votre test (ce sont des équations LaTeX avec \overline{x} qui veut dire "x barre" ou "moyenne de x" et \neq veut dire "différent de". -->
+
+```{r test1ahypo, output='asis'}
+select_answer(r"-{
+[] $$H_0: \overline{pi_{abs} t60 - pi_{abs} t0} = 0$$
+[] $$H_0: \overline{pi_{abs} t60} - \overline{pi_{abs} t0} = 0$$
+[] $$H_0: médiane(pi_{abs} t60 - pi_{abs} t0) = 0$$
+[] $$H_0: médiane(pi_{abs} t60) - médiane(pi_{abs} t0) = 0$$
+  
+[] $$H_1: \overline{pi_{abs} t60 - pi_{abs} t0} \neq 0$$
+[] $$H_1: \overline{pi_{abs} t60 - pi_{abs} t0} < 0$$
+[] $$H_1: \overline{pi_{abs} t60 - pi_{abs} t0} > 0$$
+[] $$H_1: \overline{pi_{abs} t60} - \overline{pi_{abs} t0} \neq 0$$
+[] $$H_1: \overline{pi_{abs} t60} - \overline{pi_{abs} t0} < 0$$
+[] $$H_1: \overline{pi_{abs} t60} - \overline{pi_{abs} t0} > 0$$
+[] $$H_1: médiane(pi_{abs} t60 - pi_{abs} t0) \neq 0$$
+[] $$H_1: médiane(pi_{abs} t60 - pi_{abs} t0) < 0$$
+[] $$H_1: médiane(pi_{abs} t60 - pi_{abs} t0) > 0$$
+[] $$H_1: médiane(pi_{abs} t60) - médiane(pi_{abs} t0) \neq 0$$
+[] $$H_1: médiane(pi_{abs} t60) - médiane(pi_{abs} t0) < 0$$
+[] $$H_1: médiane(pi_{abs} t60) - médiane(pi_{abs} t0) > 0$$}-")
+```
+
+<!--% Réalisez le test d'hypothèse en considérant un seuil alpha de 5%. N'utilisez pas `delata_pi` mais `pi_0` et `pi_60` directement dans votre code (attention à l'ordre des arguments et rappelez-vous que pour indiquer la variable x du tableau df, vous écrivez `df$x` !) -->
+
+```{r test1a, record='ROP', object='test1a', arg='method,alternative,p.value'}
+test1a <- ___(___, ___, paired = ___,
+  alternative = ___)
+test1a
+```
+
+<!--% Interprétez ce résultat sur le plan statistique au seuil alpha de 5% et biologique en 3 phrases maximum. L'intensité de l'effet observé vous paraît-il avoir une importance biologique ? -->
+
+```{r test1acomment, output='asis'}
+select_answer(r"-{
+[] -   Nous rejetons H~0~ au seuil $\alpha$ de 5%.
+[] -   Nous ne rejetons pas H~0~ au seuil $\alpha$ de 5%.
+[] -   Nous acceptons H~0~ au seuil $\alpha$ de 5%.
+[] -   Nous n'acceptons pas H~0~ au seuil $\alpha$ de 5%.
+  
+[] -   L'indice de performance photosynthétique de l'algue *Fucus distichus* issue de Svalbard n'est pas significativement affecté au seuil $\alpha$ de 5% après exposition de 60min à 20°C.
+[] -   Nous ne pouvons pas montrer que l'indice de performance photosynthétique de l'algue *Fucus distichus* issue de Svalbard soit significativement affecté ou non au seuil $\alpha$ de 5% après exposition de 60min à 20°C. Il faudrait recommencer l'expérience avec un plus grand nombre d'algues.
+[] -   L'algue *Fucus distichus* issue de Svalbard voit sont indice de performance photosynthétique significativement diminué au seuil $\alpha$ de 5% après  exposition de 60min à 20°C.
+[] -   L'algue *Fucus distichus* issue de Svalbard voit sont indice de performance photosynthétique significativement augmenté au seuil $\alpha$ de 5% après  exposition de 60min à 20°C.}-")
+```
+
+Ayant un petit nombre d'algues à disposition et n'ayant pas pu déterminer la distribution normale des indices de performance photosynthétique sur un plus grand échantillon, nous nous demandons s'il est raisonnable de considérer le normalité des données ici. Nous réalisons un second test plus en adéquation par rapport à cette observation.
+
+<!--% Remettez en doute l'hypothèse de Normalité. Quel test feriez-vous dans ce cas ? -->
+
+```{r test1bchoice, output='asis'}
+select_answer(r"-{
+[] Nous réalisons un test *t* de Student apparié.
+[] Nous réalisons un test *t* de Student indépendant.
+[] Nous réalisons un test *t* de Welch apparié.
+[] Nous réalisons un test *t* de Welch indépendant.
+[] Nous réalisons un test de Wilcoxon/Mann-Whitney apparié.
+[] Nous réalisons un test *t* de Wilcoxon/Mann-Whitney indépendant.
+  
+[] Le test est bilatéral et nous utilisons $\alpha$ = 5%. Les hypothèses sont :
+[] Le test est unilatéral à gauche et nous utilisons $\alpha$ = 5%. Les hypothèses sont :
+[] Le test est unilatéral à droite et nous utilisons $\alpha$ = 5%. Les hypothèses sont :}-")
+```
+
+<!-- Formulez les hypothèses nulle et alternative de ce test alternatif. -->
+
+```{r test1bhypo, output='asis'}
+select_answer(r"-{
+[] $$H_0: \overline{pi_{abs} t60 - pi_{abs} t0} = 0$$
+[] $$H_0: \overline{pi_{abs} t60} - \overline{pi_{abs} t0} = 0$$
+[] $$H_0: médiane(pi_{abs} t60 - pi_{abs} t0) = 0$$
+[] $$H_0: médiane(pi_{abs} t60) - médiane(pi_{abs} t0) = 0$$
+  
+[] $$H_1: \overline{pi_{abs} t60 - pi_{abs} t0} \neq 0$$
+[] $$H_1: \overline{pi_{abs} t60 - pi_{abs} t0} < 0$$
+[] $$H_1: \overline{pi_{abs} t60 - pi_{abs} t0} > 0$$
+[] $$H_1: \overline{pi_{abs} t60} - \overline{pi_{abs} t0} \neq 0$$
+[] $$H_1: \overline{pi_{abs} t60} - \overline{pi_{abs} t0} < 0$$
+[] $$H_1: \overline{pi_{abs} t60} - \overline{pi_{abs} t0} > 0$$
+[] $$H_1: médiane(pi_{abs} t60 - pi_{abs} t0) \neq 0$$
+[] $$H_1: médiane(pi_{abs} t60 - pi_{abs} t0) < 0$$
+[] $$H_1: médiane(pi_{abs} t60 - pi_{abs} t0) > 0$$
+[] $$H_1: médiane(pi_{abs} t60) - médiane(pi_{abs} t0) \neq 0$$
+[] $$H_1: médiane(pi_{abs} t60) - médiane(pi_{abs} t0) < 0$$
+[] $$H_1: médiane(pi_{abs} t60) - médiane(pi_{abs} t0) > 0$$}-")
+```
+
+<!--% Réalisez le second test d'hypothèse en considérant un seuil alpha de 5%.-->
+
+```{r test1b, record='ROP', object='test1b', arg='method,alternative,p.value'}
+test1b <- ___(___, ___, paired = ___,
+  alternative = ___)
+test1b
+```
+
+<!--% Interprétez ce second résultat au seuil alpha de 5%. -->
+
+```{r test1bcomment, output='asis'}
+select_answer(r"-{
+[] -   Nous rejetons H~0~ au seuil $\alpha$ de 5%.
+[] -   Nous ne rejetons pas H~0~ au seuil $\alpha$ de 5%.
+[] -   Nous acceptons H~0~ au seuil $\alpha$ de 5%.
+[] -   Nous n'acceptons pas H~0~ au seuil $\alpha$ de 5%.
+  
+[] -  L'indice de performance photosynthétique de l'algue *Fucus distichus* issue de Svalbard n'est pas significativement affecté au seuil $\alpha$ de 5% après exposition de 60min à 20°C.
+[] -  Nous ne pouvons pas montrer que l'indice de performance photosynthétique de l'algue *Fucus distichus* issue de Svalbard soit significativement affecté ou non au seuil $\alpha$ de 5% après exposition de 60min à 20°C. Il faudrait recommencer l'expérience avec un plus grand nombre d'algues.
+[] -  L'algue *Fucus distichus* issue de Svalbard voit sont indice de performance photosynthétique significativement diminué au seuil $\alpha$ de 5% après  exposition de 60min à 20°C.
+[] -  L'algue *Fucus distichus* issue de Svalbard voit sont indice de performance photosynthétique significativement augmenté au seuil $\alpha$ de 5% après  exposition de 60min à 20°C.}-")
+```
+
+<!--% Interprétez les résultats des DEUX tests ci-dessous.-->
+
+```{r test1abcomment, output='asis'}
+select_answer(r"-{
+[] -   Les deux tests mènent à la même conclusion : pas d'effet significatif.
+[] -   Les deux tests mènent à la même conclusion : effet significatif observé.
+[] -   Le premier test conclut à une différence mais pas le second.
+[] -   Le second test conclut à une différence mais pas le premier.
+
+[] -   Les résultats obtenus sont cohérent et nous n'avons pas de problèmes ici.
+[] -   Les résultats obtenus sont cohérent mais nous questionnons la puissance des tests et la taille de l'échantillon (qui devrait être plus grand).
+[] -   Les résultats obtenus étant contradictoire, nous ne pouvons rien conclure au final.
+[] -   Les résultats sont incohérent et il doit y avoir une erreur de calcul.
+[] -   Les résultats incohérents entre les deux tests s'expliquent par la non normalité des distributions.
+[] -   Les résultats incohérents entre les deux tests s'expliquent par une différence de puissance des tests. Le test paramétrique étant plus puissant, il rejette H~0~ plus rapidement.
+
+[] -   Nous concluons en faveur du test paramétrique.
+[] -   Nous concluons en faveur du test non paramétrique.
+[] -   Nous devrions recommencer l'expérience avec un plus grand échantillon d'algues et/ou étudier l'importance de l'effet (et conclure éventuellement qu'il est négligeable, biologiquement parlant).
+[] -   Si nous ne pouvons pas vérifier la normalité des distributions de performances photosynthétiques, nous devrions recommencer l'expérience avec plus d'algues et nous fier au test non paramétrique.}-")
+```
+
+## Différences entre Svalbard et Kirkenes
+
+Existe-t-il une différence dans la réponse de l'algue *Fucus distichus* entre les deux sites, Svalbard et Kirkenes ?
+
+<!--% Sélectionnez tous les individus étudiés dans une eau à 20°C après 60 minutes dans `photo4`. Affichez ensuite le contenu du tableau `photo4` dans votre rapport en le formatant à l'aide de `tabularise()`. -->
+
+```{r select2, record='RODFS', object='photo4'}
+photo %>.%
+  sfilter(., ___, ___) ->
+  photo4
+tabularise(photo4)
+```
+
+<!--% Réalisez un graphique pertinent (boite de dispersion parallèle avec points superposés en 'jitter') par rapport à ce test pour illustrer la situation d'après l'indice de performance de la photosynthèse pi_abs. -->
+
+```{r plot2, record='RNP', arg='labels'}
+chart(data = ___, ___) +
+  ___() +
+  geom_jitter(alpha = 0.3, width = 0.1) +
+  labs(y = "Performance de la photosynthèse (60min à 20°C)", x = "Population")
+```
+
+<!-- Calculez un tableau des descripteurs statistiques `photo4_tab` pertinents par rapport à ce test (incluez médiane, moyenne, écart type et nombre d'observations dans vos calculs). -->
+
+```{r tab2, record='RODFS', object='photo4_tab'}
+photo4 %>.%
+  sgroup_by(., ___) %>.% 
+  ssummarise(.,
+    `moyenne pi_abs`    = ___,
+    `médiane pi_abs`    = ___,
+    `écart type pi_abs` = ___,
+    `n`                 = ___) ->
+  photo4_tab
+tabularise(photo4_tab)
+```
+
+<!--% Quel test d'hypothèse allez-vous réaliser (en considérant une distribution normale des performances photosynthétiques) ? -->
+
+```{r test2achoice, output='asis'}
+select_answer(r"-{
+[] Nous réalisons un test *t* de Student apparié.
+[] Nous réalisons un test *t* de Student indépendant.
+[] Nous réalisons un test *t* de Welch apparié.
+[] Nous réalisons un test *t* de Welch indépendant.
+[] Nous réalisons un test de Wilcoxon/Mann-Whitney apparié.
+[] Nous réalisons un test *t* de Wilcoxon/Mann-Whitney indépendant.
+  
+[] Le test est bilatéral et nous utilisons $\alpha$ = 5%. Les hypothèses sont :
+[] Le test est unilatéral à gauche et nous utilisons $\alpha$ = 5%. Les hypothèses sont :
+[] Le test est unilatéral à droite et nous utilisons $\alpha$ = 5%. Les hypothèses sont :}-")
+```
+
+<!--% Formulez les hypothèses nulle et alternative de ce test. -->
+
+```{r test2ahypo, output='asis'}
+select_answer(r"-{
+[] $$H_0: \overline{Kirkenes - Svalbard} = 0$$
+[] $$H_0: \overline{Svalbard - Kirkenes} = 0$$
+[] $$H_0: \overline{Kirkenes} - \overline{Svalbard} = 0$$
+[] $$H_0: \overline{Svalbard} - \overline{Kirkenes} = 0$$
+[] $$H_0: médiane(Kirkenes - Svalbard) = 0$$
+[] $$H_0: médiane(Svalbard - Kirkenes) = 0$$
+[] $$H_0: médiane(Kirkenes) - médiane(Svalbard) = 0$$
+[] $$H_0: médiane(Svalbard) - médiane(Kirkenes) = 0$$
+  
+[] $$H_1: \overline{Kirkenes - Svalbard} \neq 0$$
+[] $$H_1: \overline{Kirkenes - Svalbard} < 0$$
+[] $$H_1: \overline{Kirkenes - Svalbard} > 0$$
+[] $$H_1: \overline{Svalbard - Kirkenes} \neq 0$$
+[] $$H_1: \overline{Svalbard - Kirkenes} < 0$$
+[] $$H_1: \overline{Svalbard - Kirkenes} > 0$$
+[] $$H_1: \overline{Kirkenes} - \overline{Svalbard} \neq 0$$
+[] $$H_1: \overline{Kirkenes} - \overline{Svalbard} < 0$$
+[] $$H_1: \overline{Kirkenes} - \overline{Svalbard} > 0$$
+[] $$H_1: \overline{Svalbard} - \overline{Kirkenes} \neq 0$$
+[] $$H_1: \overline{Svalbard} - \overline{Kirkenes} < 0$$
+[] $$H_1: \overline{Svalbard} - \overline{Kirkenes} > 0$$
+[] $$H_1: médiane(Kirkenes - Svalbard) \neq 0$$
+[] $$H_1: médiane(Kirkenes - Svalbard) < 0$$
+[] $$H_1: médiane(Kirkenes - Svalbard) > 0$$
+[] $$H_1: médiane(Svalbard - Kirkenes) \neq 0$$
+[] $$H_1: médiane(Svalbard - Kirkenes) < 0$$
+[] $$H_1: médiane(Svalbard - Kirkenes) > 0$$
+[] $$H_1: médiane(Kirkenes) - médiane(Svalbard) \neq 0$$
+[] $$H_1: médiane(Kirkenes) - médiane(Svalbard) < 0$$
+[] $$H_1: médiane(Kirkenes) - médiane(Svalbard) > 0$$
+[] $$H_1: médiane(Svalbard) - médiane(Kirkenes) \neq 0$$
+[] $$H_1: médiane(Svalbard) - médiane(Kirkenes) < 0$$
+[] $$H_1: médiane(Svalbard) - médiane(Kirkenes) > 0$$}-")
+```
+
+<!--% Réalisez le test d'hypothèse, en prenant un seuil alpha de 5%. -->
+
+```{r test2a, record='ROP', object='test2a', arg='method,alternative,p.value'}
+test2a <- ___(data = ___, ___, var.equal = ___)
+test2a
+```
+
+<!--% Interprétez le résultat obtenu. -->
+
+```{r test2acomment, output='asis'}
+select_answer(r"-{
+[] -   Nous rejetons H~0~ au seuil $\alpha$ de 5%.
+[] -   Nous ne rejetons pas H~0~ au seuil $\alpha$ de 5%.
+[] -   Nous acceptons H~0~ au seuil $\alpha$ de 5%.
+[] -   Nous n'acceptons pas H~0~ au seuil $\alpha$ de 5%.
+  
+[] -   Il n'y a pas de différences significatives au seuil $\alpha$ de 5% des performances photosynthétiques après 60min à 20°C entre les algues issues des deux sites.
+[] -   Nous ne pouvons pas montrer que l'indice de performance photosynthétique de *Fucus disticus* diffère significativement en fonction du site d'origine après 60min à 20°C au seuil $\alpha$ de 5%. Il faudrait recommencer l'expérience avec un plus grand nombre d'algues.
+[] -   Les algues issues de Svalbard ont un indice de performance photosynthétique significativement supérieur (au seuil $\alpha$ de 5%) à celles issues de Kirkenes après  exposition de 60min à 20°C.
+[] -   Les algues issues de Svalbard ont un indice de performance photosynthétique significativement inférieur (au seuil $\alpha$ de 5%) à celles issues de Kirkenes après  exposition de 60min à 20°C.}-")
+```
+
+Ne pouvant démontrer la normalité des distributions des performances photosynthétiques, nous en tenons compte pour réaliser un second test d'hypothèse.
+
+<!--% Maintenant, à nouveau, vous constatez que vous n'avez d'information qui vous permettent de considérer la normalité des distributions des performances photosynthétiques. Quel test réalisez-vous dans ce cas ? -->
+
+```{r test2bchoice, output='asis'}
+select_answer(r"-{
+[] Nous réalisons un test *t* de Student apparié.
+[] Nous réalisons un test *t* de Student indépendant.
+[] Nous réalisons un test *t* de Welch apparié.
+[] Nous réalisons un test *t* de Welch indépendant.
+[] Nous réalisons un test de Wilcoxon/Mann-Whitney apparié.
+[] Nous réalisons un test *t* de Wilcoxon/Mann-Whitney indépendant.
+  
+[] Le test est bilatéral et nous utilisons $\alpha$ = 5%. Les hypothèses sont :
+[] Le test est unilatéral à gauche et nous utilisons $\alpha$ = 5%. Les hypothèses sont :
+[] Le test est unilatéral à droite et nous utilisons $\alpha$ = 5%. Les hypothèses sont :}-")
+```
+
+<!--% Formulez les hypothèses nulle et alternative de ce dernier test. -->
+
+```{r test2bhypo, output='asis'}
+select_answer(r"-{
+[] $$H_0: \overline{Kirkenes - Svalbard} = 0$$
+[] $$H_0: \overline{Svalbard - Kirkenes} = 0$$
+[] $$H_0: \overline{Kirkenes} - \overline{Svalbard} = 0$$
+[] $$H_0: \overline{Svalbard} - \overline{Kirkenes} = 0$$
+[] $$H_0: médiane(Kirkenes - Svalbard) = 0$$
+[] $$H_0: médiane(Svalbard - Kirkenes) = 0$$
+[] $$H_0: médiane(Kirkenes) - médiane(Svalbard) = 0$$
+[] $$H_0: médiane(Svalbard) - médiane(Kirkenes) = 0$$
+  
+[] $$H_1: \overline{Kirkenes - Svalbard} \neq 0$$
+[] $$H_1: \overline{Kirkenes - Svalbard} < 0$$
+[] $$H_1: \overline{Kirkenes - Svalbard} > 0$$
+[] $$H_1: \overline{Svalbard - Kirkenes} \neq 0$$
+[] $$H_1: \overline{Svalbard - Kirkenes} < 0$$
+[] $$H_1: \overline{Svalbard - Kirkenes} > 0$$
+[] $$H_1: \overline{Kirkenes} - \overline{Svalbard} \neq 0$$
+[] $$H_1: \overline{Kirkenes} - \overline{Svalbard} < 0$$
+[] $$H_1: \overline{Kirkenes} - \overline{Svalbard} > 0$$
+[] $$H_1: \overline{Svalbard} - \overline{Kirkenes} \neq 0$$
+[] $$H_1: \overline{Svalbard} - \overline{Kirkenes} < 0$$
+[] $$H_1: \overline{Svalbard} - \overline{Kirkenes} > 0$$
+[] $$H_1: médiane(Kirkenes - Svalbard) \neq 0$$
+[] $$H_1: médiane(Kirkenes - Svalbard) < 0$$
+[] $$H_1: médiane(Kirkenes - Svalbard) > 0$$
+[] $$H_1: médiane(Svalbard - Kirkenes) \neq 0$$
+[] $$H_1: médiane(Svalbard - Kirkenes) < 0$$
+[] $$H_1: médiane(Svalbard - Kirkenes) > 0$$
+[] $$H_1: médiane(Kirkenes) - médiane(Svalbard) \neq 0$$
+[] $$H_1: médiane(Kirkenes) - médiane(Svalbard) < 0$$
+[] $$H_1: médiane(Kirkenes) - médiane(Svalbard) > 0$$
+[] $$H_1: médiane(Svalbard) - médiane(Kirkenes) \neq 0$$
+[] $$H_1: médiane(Svalbard) - médiane(Kirkenes) < 0$$
+[] $$H_1: médiane(Svalbard) - médiane(Kirkenes) > 0$$}-")
+```
+
+<!--% Effectuez ce test, toujours avec un seuil alpha de 5%. -->
+
+```{r test2b, record='ROP', object='test2b', arg='method,alternative,p.value'}
+test2b <- ___(data = ___, ___)
+test2b
+```
+
+<!--% Interprétez ce dernier test. -->
+
+```{r test2bcomment, output='asis'}
+select_answer(r"-{
+[] -   Nous rejetons H~0~ au seuil $\alpha$ de 5%.
+[] -   Nous ne rejetons pas H~0~ au seuil $\alpha$ de 5%.
+[] -   Nous acceptons H~0~ au seuil $\alpha$ de 5%.
+[] -   Nous n'acceptons pas H~0~ au seuil $\alpha$ de 5%.
+  
+[] -   Il n'y a pas de différences significatives au seuil $\alpha$ de 5% des performances photosynthétiques après 60min à 20°C entre les algues issues des deux sites.
+[] -   Nous ne pouvons pas montrer que l'indice de performance photosynthétique de *Fucus disticus* diffère significativement en fonction du site d'origine après 60min à 20°C au seuil $\alpha$ de 5%. Il faudrait recommencer l'expérience avec un plus grand nombre d'algues.
+[] -   Les algues issues de Svalbard ont un indice de performance photosynthétique significativement supérieur (au seuil $\alpha$ de 5%) à celles issues de Kirkenes après  exposition de 60min à 20°C.
+[] -   Les algues issues de Svalbard ont un indice de performance photosynthétique significativement inférieur (au seuil $\alpha$ de 5%) à celles issues de Kirkenes après  exposition de 60min à 20°C.}-")
+```
+
+<!--% Comparez les résultats obtenus de ces deux derniers tests. -->
+
+```{r test2abcomment, output='asis'}
+select_answer(r"-{
+[] -   Les deux tests mènent à la même conclusion : pas d'effet significatif.
+[] -   Les deux tests mènent à la même conclusion : effet significatif observé.
+[] -   Le premier test conclut à une différence mais pas le second.
+[] -   Le second test conclut à une différence mais pas le premier.
+
+[] -   Les résultats obtenus sont cohérent et nous n'avons pas de problèmes ici.
+[] -   Les résultats obtenus sont cohérent mais nous questionnons la puissance des tests et la taille de l'échantillon (qui devrait être plus grand).
+[] -   Les résultats obtenus étant contradictoire, nous ne pouvons rien conclure au final.
+[] -   Les résultats sont incohérent et il doit y avoir une erreur de calcul.
+[] -   Les résultats incohérents entre les deux tests s'expliquent par la non normalité des distributions.
+[] -   Les résultats incohérents entre les deux tests s'expliquent par une différence de puissance des tests. Le test paramétrique étant plus puissant, il rejette H~0~ plus rapidement.
+
+[] -   Nous concluons en faveur du test paramétrique.
+[] -   Nous concluons en faveur du test non paramétrique.
+[] -   Nous devrions recommencer l'expérience avec un plus grand échantillon d'algues et/ou étudier l'importance de l'effet (et conclure éventuellement qu'il est négligeable, biologiquement parlant).
+[] -   Si nous ne pouvons pas vérifier la normalité des distributions de performances photosynthétiques, nous devrions recommencer l'expérience avec plus d'algues et nous fier au test non paramétrique.}-")
+```
+
+Si nous pouvions recommencer l'expérience, quelle taille d'échantillon nous faudrait-il pour démontrer un effet significatif ? L'effet mesuré ici avec le paramètre *D* de Cohen est :
+
+<!--% Terminez votre analyse en déterminant la taille de l'échantillon requise pour montrer éventuellement une différence significative au seuil alpha de 5% dans le cas du test de Welch appliqué à la différence entre Kirkenes et Svalbard tout en ayant une puissance du test d'au moins 80%. Pour ce faire, vous devez calculer la taille de l'effet observé selon Cohen qui correspond à la différence des moyennes divisée par la racine carré de la somme des variances dans ce cas (il est calculé pour vous ci-dessous). -->
+
+```{r power2, record='ROP', object='power2', arg='method,alternative,n'}
+# Calcul de l'effet observé (d de Cohen)
+(cohen_d <- (photo4_tab$`moyenne pi_abs`[1] -
+    photo4_tab$`moyenne pi_ab`[2]) /
+  sqrt(photo4_tab$`écart type pi_abs`[1]^2 +
+    photo4_tab$`écart type pi_abs`[2]^2))
+# Taille d'échantillon minimal nécessaire
+power2 <- pwr::___(d = ___, sig.level = ___, power = ___,
+  type = ___, alternative = ___)
+power2
+```
+
+Le test de puissance nous indique qu'il faudrait au moins `r ceiling(power2$n)` algues issues de chacun des deux sites pour avoir une puissance de test d'au moins 80% et espérer montrer significativement une différence éventuelle entre les deux sites au seuil $\alpha$ de 5%.
+
+# Discussion et conclusions
+
+<!--% Discutez les résultats obtenus en 4 à 6 points ci-dessous. -->
+
+-   ...
+
+-   ...
+
+-   ...
+
+-   ...
+
+<!--# Notez bien ceci : rien ne vous interdit de faire les tests paramétriques et non paramétriques (ici Student/Welch versus Wilcoxon/Mann-Whitney) dans votre bloc-notes et d'en discuter les résultats respectifs comme réalisé plus haut. Cependant, dans un rapport final ou dans une publication, vous ne présentez *jamais* les deux types de tests simultanément. Vous choisissez l'un ou l'autre en fonction de ce que vous pouvez démontrer ou non en ce qui concerne les conditions d'application et vous justifiez votre choix dans le matériel et méthodes ou dans la section des résultats. -->
+
+# Références
+
+<!--% Ne rien indiquer ici. La référence bibliographique se placera automatiquement ici.-->
